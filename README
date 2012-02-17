@@ -7,6 +7,10 @@ Blog post: http://serdaryildirim.net/ai/recommender-systems-collaborative-filter
 
 licence? no.
 
+notes
+- MovieLens data files are not included. Only change is made for 100K dataset as follows:
+Value separation characters are changed from space (' ') to "|" (u.data, ua.base, ua.test files)
+
 credits
 MovieLens data: http://www.grouplens.org/node/73
 Incremental SVD Algorithm: http://sifter.org/~simon/journal/20061211.html

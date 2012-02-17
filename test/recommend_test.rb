@@ -4,8 +4,8 @@ require './../lib/recommend_factory'
 class RecommendTest
   # MEMORY_BASED or MODEL_BASED
   CF_METHOD_TYPE = Recommendation::MODEL_BASED
-  # MEMORY_BASED: USER_BASED or ITEM_BASED // MODEL_BASED: SVD_ITEM_BASED or SVD_USER_BASED
-  CF_ALGORITHM   = Recommendation::SVD_USER_BASED
+  # USER_BASED or ITEM_BASED or SVD_ITEM_BASED or SVD_USER_BASED or SVD_INCREMENTAL
+  CF_ALGORITHM   = Recommendation::SVD_INCREMENTAL
   
   REGENERATE_ITEM_BASED_DATA = true
   REGENERATE_SVD_DATA        = true
@@ -20,6 +20,7 @@ class RecommendTest
   ML_RATINGS_FILE        = "#{ML_BASE_FOLDER}ua.base"
   ML_TEST_COMPARE_FILE   = "#{ML_BASE_FOLDER}ua.test"
   # 1M => "::" // 100K => "|"
+  # NOTE: for 100K MovieLens data, value separation characters are changed from space (' ') to "|" (u.data, ua.base, ua.test files)
   ML_ITEM_SEPERATOR      = "|"
     
   # Runs the test.
@@ -42,7 +43,7 @@ class RecommendTest
     puts "MovieLens recommendation started at: #{load_data_end_time} seconds."
     recsys = Recommendation::Factory.get CF_METHOD_TYPE, CF_ALGORITHM
     recsys.set_data @users, @items
-    #recsys.default_similar_objects_count = 5
+    #recsys.default_similar_objects_count = 500
     
     if CF_ALGORITHM == Recommendation::ITEM_BASED
       recsys.precompute REGENERATE_ITEM_BASED_DATA

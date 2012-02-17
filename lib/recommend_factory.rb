@@ -15,6 +15,7 @@ module Recommendation
   require "#{BASE_DIR}recommend_user_based"
   require "#{BASE_DIR}recommend_svd_user_based"
   require "#{BASE_DIR}recommend_svd_item_based"
+  require "#{BASE_DIR}recommend_svd_incremental"
   
   MEMORY_BASED    = 'memory_based'
   MODEL_BASED     = 'model_based'
@@ -23,6 +24,7 @@ module Recommendation
   USER_BASED      = 'user_based'
   SVD_USER_BASED  = 'svd_user_based'
   SVD_ITEM_BASED  = 'svd_item_based'
+  SVD_INCREMENTAL = 'svd_incremental'
   
   class Factory
     # Static method returns a new instance of CF Implementation
@@ -38,6 +40,8 @@ module Recommendation
           Recommendation::RecommendModel::RecommendSVDItemBased.new
         elsif algo == Recommendation::SVD_USER_BASED
           Recommendation::RecommendModel::RecommendSVDUserBased.new
+        elsif algo == Recommendation::SVD_INCREMENTAL
+          Recommendation::RecommendModel::RecommendSVDIncremental.new
         end
       end
     end
