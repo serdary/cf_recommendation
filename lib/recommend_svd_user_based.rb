@@ -2,7 +2,7 @@ module Recommendation
   module RecommendModel
     # User-Based SVD (Model Based) Collaborative Filtering Method Implementation
     # Uses 'linalg' gem for matrix operations, please make sure it is working.
-    # Takes first 2 columns of matrixes, finds user similarities using cosine
+    # Takes first 2 columns of matrices, finds user similarities using cosine
     # based similarity method, returns the list of recommended users
     # Use set_data method to initialize object with users and items
     # recommendations_for method for getting recommended items for active user
@@ -15,7 +15,7 @@ module Recommendation
       MIN_SIMILARITY_PERCENTAGE = 0.9
       
       SAVE_COMPUTED_SVD_DATA = true
-      USER_BASED_SVD_COMPUTED_DATA_FILE = File.dirname(__FILE__) + "/data/user_based_svd_data.dat"
+      USER_BASED_SVD_COMPUTED_DATA_FILE = File.dirname(__FILE__) + '/data/user_based_svd_data.dat'
       
       def initialize
         @file_path = USER_BASED_SVD_COMPUTED_DATA_FILE
@@ -113,14 +113,12 @@ module Recommendation
         @s_2col = Linalg::DMatrix.columns [s.column(0).to_a.flatten[0,2], s.column(1).to_a.flatten[0,2]]
           
         @similarity_matrix = {}
-#j=0
         @users.each_value do |user|
           puts "Started creating similar user for:#{user}"
           @similarity_matrix[user.id] = find_similar_users user, @default_similar_objects_count
-#j+=1;break if j == 6
         end
         
-        puts "Creation of similarity matrix for users lasted: #{Time.now - start_time} seconds."
+        puts "Creation of similarity matrix for users took: #{Time.now - start_time} seconds."
       end
       
       # Finds similar users to active_user

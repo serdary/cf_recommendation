@@ -9,8 +9,7 @@ module Recommendation
       attr_accessor :users, :items, :default_recommendation_count, :default_similar_objects_count
             
       # Currently 3 methods are supported, Euclidean, Pearson and Jaccard Index
-      # TODO: check manhattan distance method!
-      # TODO: It is not acceptable when users' item list sizes are too different 
+      # TODO: Recommendations are not acceptable when users' item list sizes are too different
       # but that is not took into account while calculating similarities 
       # by euclidean or pearson methods.
       SIMILARITY_METHOD = 'pearson' # euclidean OR pearson OR jaccard
@@ -137,8 +136,7 @@ module Recommendation
         # TODO: Think about following: commons: user1: item1-R:1, user2: item1-R:5, SIM: 20%
         # commons: user1: item1-R:1,item2-R:1,item3-R:1, user2: item1-R:1,item2-R:1,item3-R:5, SIM: 20%
         # Adding 1 and inverting doesn't make so much sense!
-        result = 1 / (1 + result)
-        #result = 1 / (1 + Math.sqrt(result)) TODO: boyle yap orjinal euclidean
+        1 / (1 + result)
       end
       
       # Find Similarities for user by using Pearson Correlation.
@@ -196,7 +194,7 @@ module Recommendation
         diff_percentage = total_diff == 0 ? 0 : (total_diff * unit_percentage / 100)
         
         sim = (size.to_f / (u1.list.items.size + u2.list.items.size - size)) - diff_percentage
-        return sim > 0 ? sim : 0
+        sim > 0 ? sim : 0
       end
       
       def find_common_items(u1, u2)

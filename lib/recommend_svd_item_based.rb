@@ -2,7 +2,7 @@ module Recommendation
   module RecommendModel
     # Item-Based SVD (Model Based) Collaborative Filtering Method Implementation
     # Uses 'linalg' gem for matrix operations, please make sure it is working.
-    # Takes first 2 columns of matrixes, finds similarities using cosine
+    # Takes first 2 columns of matrices, finds similarities using cosine
     # based similarity method, returns the list of recommended items
     # Use set_data method to initialize object with users and items
     # recommendations_for method for getting recommended items for active user
@@ -15,7 +15,7 @@ module Recommendation
       MIN_SIMILARITY_PERCENTAGE = 0.9
       
       SAVE_COMPUTED_SVD_DATA = true
-      USER_BASED_SVD_COMPUTED_DATA_FILE = File.dirname(__FILE__) + "/data/item_based_svd_data.dat"
+      USER_BASED_SVD_COMPUTED_DATA_FILE = File.dirname(__FILE__) + '/data/item_based_svd_data.dat'
       
       def initialize
         @file_path = USER_BASED_SVD_COMPUTED_DATA_FILE
@@ -104,7 +104,7 @@ module Recommendation
           @similarity_matrix[item.id] = find_similar_items item, @default_similar_objects_count
         end
         
-        puts "Creation of similarity matrix for items lasted: #{Time.now - start_time} seconds."
+        puts "Creation of similarity matrix for items took: #{Time.now - start_time} seconds."
       end
       
       # Find similar items to the active item

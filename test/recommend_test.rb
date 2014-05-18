@@ -21,7 +21,11 @@ class RecommendTest
   ML_TEST_COMPARE_FILE   = "#{ML_BASE_FOLDER}ua.test"
   # 1M => "::" // 100K => "|"
   # NOTE: for 100K MovieLens data, value separation characters are changed from space (' ') to "|" (u.data, ua.base, ua.test files)
-  ML_ITEM_SEPERATOR      = "|"
+  ML_ITEM_SEPARATOR      = "|"
+
+  def initialize
+    @items, @users, @ratings = {}, {}, {}
+  end
     
   # Runs the test.
   # Gets a new instance of the specified CF implementation (by using Recommendation::Factory.get)
@@ -77,9 +81,8 @@ class RecommendTest
   # Loads test ratings from ML_TEST_COMPARE_FILE to compare predictions and 
   # actual ratings for user-item-rating triples
   def load_test_ratings
-    @ratings = {}
     File.open(ML_TEST_COMPARE_FILE).each do |line|
-      vals = line.split(ML_ITEM_SEPERATOR)
+      vals = line.split(ML_ITEM_SEPARATOR)
       user_id, item_id, rating = vals[0].to_i, vals[1].to_i, vals[2].to_i
 
       next if user_id == 0 or item_id == 0 or rating == 0
@@ -101,8 +104,7 @@ class RecommendTest
     rating_ind = 0
     @ratings.each do |k, v|
       rating_ind += 1
-      puts "index:#{rating_ind}"
-      
+
       v.each do |rating_pair|
         item_id = rating_pair[:item_id]
         rating = rating_pair[:rating]
@@ -117,8 +119,8 @@ class RecommendTest
       end
     end
     result = Math.sqrt(sq_sum_of_diff / item_count)
-    puts "ITEMCOUNT:#{item_count}"
-    puts "RESULT   :#{result}"
+    puts "ITEM_COUNT: #{item_count}"
+    puts "RESULT    : #{result}"
   end
   
   # Loads triples (user-item-rating) from files
@@ -130,19 +132,17 @@ class RecommendTest
   
   # Loads user file and creates objects to use
   def load_users_from_movielens
-    @users = {}
     File.open(ML_USERS_FILE).each do |line|
-      id = line.split(ML_ITEM_SEPERATOR)[0].to_i
+      id = line.split(ML_ITEM_SEPARATOR)[0].to_i
       @users[id] = Recommendation::User.new(id, "U-#{id}")
     end
   end
   
   # Loads movies (items) file and creates objects to use
   def load_movies_from_movielens
-    @items = {}
     File.open(ML_MOVIES_FILE, :encoding=>"ASCII-8BIT").each do |line|
-      id = line.split(ML_ITEM_SEPERATOR)[0].to_i
-      title = line.split(ML_ITEM_SEPERATOR)[1]
+      id = line.split(ML_ITEM_SEPARATOR)[0].to_i
+      title = line.split(ML_ITEM_SEPARATOR)[1]
       @items[id] = Recommendation::Item.new(id, title)
     end
   end
@@ -151,9 +151,9 @@ class RecommendTest
   def load_ratings_from_movielens
     @total_rating_count = 0
     File.open(ML_RATINGS_FILE).each do |line|
-      user_id = line.split(ML_ITEM_SEPERATOR)[0].to_i
-      item_id = line.split(ML_ITEM_SEPERATOR)[1].to_i
-      rating = line.split(ML_ITEM_SEPERATOR)[2].to_i
+      user_id = line.split(ML_ITEM_SEPARATOR)[0].to_i
+      item_id = line.split(ML_ITEM_SEPARATOR)[1].to_i
+      rating = line.split(ML_ITEM_SEPARATOR)[2].to_i
       next if user_id == 0 or item_id == 0 or rating == 0
       
       user = @users[user_id]
@@ -166,12 +166,8 @@ class RecommendTest
   end
   
   # Used to display a summary of users and their items.
-  # Not suitable for large datasets, just use with dummy small user/items lists
+  # Not suitable for large datasets, use this with small user/items lists
   def display(type = 'all')
-    puts '_'*100
-    puts @items.inspect if type == 'all'
-    puts '_'*100
-    
     @users.each_value do |u|
       puts "#{u.name} items: "
       u.list.items.each_value do |user_item|
@@ -179,6 +175,5 @@ class RecommendTest
       end
       puts
     end
-    puts '_'*100
   end
 end

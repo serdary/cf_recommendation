@@ -15,7 +15,7 @@ module Recommendation
       
       # Save computed data to a file to use faster in future
       SAVE_COMPUTED_ITEM_BASED_DATA = true
-      ITEM_BASED_COMPUTED_DATA_FILE = File.dirname(__FILE__) + "/data/item_based_memory_data.dat"
+      ITEM_BASED_COMPUTED_DATA_FILE = File.dirname(__FILE__) + '/data/item_based_memory_data.dat'
       
       def initialize
         @file_path = ITEM_BASED_COMPUTED_DATA_FILE
@@ -51,9 +51,9 @@ module Recommendation
       private
       
       # Used to calculate recommendation by Item-based CF method.
-      # Take all items that user rated, fetch all similar items for each user item
-      # Add to a weighted matrix, if the user has not already rated that item
-      # Calculated the weighted value for each movie, return top movies
+      # Takes all items that user rated, fetches all similar items for each user item
+      # Adds to a weighted matrix, if the user has not already rated that item
+      # Calculates the weighted value for each movie, return top movies
       def recommend_by_item_based(user, top = @default_recommendation_count)
         return unless @similarity_matrix
         
@@ -123,8 +123,8 @@ module Recommendation
       # Uses passed list if any (used to gain perf. a little bit)
       def similarity_for_items(item1, item2, list = nil)
         # cache disabled
-        #cached_sim = get_cached_similarity_for item1, item2
-        #return cached_sim if cached_sim
+        # cached_sim = get_cached_similarity_for item1, item2
+        # return cached_sim if cached_sim
         sim = 0.0
         case SIMILARITY_METHOD
           when 'euclidean'
@@ -140,9 +140,7 @@ module Recommendation
       
       # Returns cached similarity for items
       def get_cached_similarity_for(item1, item2)
-        sim = @cached_similarities["#{item1}_#{item2}"]
-        return if sim
-        @cached_similarities["#{item2}_#{item1}"]
+        @cached_similarities["#{item1}_#{item2}"] || @cached_similarities["#{item2}_#{item1}"]
       end
       
       # Sets similarity cache for 2 items
@@ -163,7 +161,7 @@ module Recommendation
           result += (u.rating_for(item1.id) - u.rating_for(item2.id))**2
         end
         result = 1 / (1 + result)
-        #result = 1 / (1 + Math.sqrt(result)) TODO: boyle yap orjinal euclidean
+        # result = 1 / (1 + Math.sqrt(result)) TODO: make tests to see the difference
       end
       
       # Find similarity value for 2 items.

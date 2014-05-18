@@ -17,13 +17,13 @@ module Recommendation
       @items[id]
     end
     
-    # Checks if item included in list
+    # Checks if item is in the list
     def has_item?(id)
       @items[id] != nil
     end
   
     def to_s
-      "ItemList: #{@items.each { |i| print "#{i}," }}"
+      "ItemList: #{@items.join(', ')}"
     end
   end
 end
